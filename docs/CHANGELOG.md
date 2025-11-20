@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed - Tooling alignment with PRDs
+- Migrated package manager configuration to **pnpm** (`.replit` workflow updated, `package-lock.json` removido) y agregado `replit.nix` con pnpm.
+- `package.json` ahora separa dependencias de runtime y de desarrollo según lo exigido en los PRDs (Fastify/PG/Zod en runtime; TypeScript, tipos, Vitest y tsx en dev).
+- Generación de `pnpm-lock.yaml` pendiente por bloqueos 403 del registro de npm en el entorno actual; reintentar cuando haya acceso.
+
 ### Added - T5: Legal Pages, Settings, and Leads Management API (November 2025)
 
 #### Overview
