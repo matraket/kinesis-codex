@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { cookies } from 'next/headers';
 
 export const SESSION_COOKIE_NAME = 'kinesis_admin_session';

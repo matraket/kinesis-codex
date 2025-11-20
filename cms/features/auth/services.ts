@@ -1,5 +1,4 @@
 import { apiClient } from '@/lib/api-client';
-import { getSessionFromCookies, SESSION_COOKIE_NAME } from '@/lib/session';
 
 export interface AdminSession {
   alias: string;
@@ -25,5 +24,3 @@ export async function getSession(): Promise<AdminSession | null> {
   }
   return response.json();
 }
-
-export { getSessionFromCookies, SESSION_COOKIE_NAME };
