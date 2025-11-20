@@ -17,7 +17,7 @@ export interface DashboardSummary {
 }
 
 export async function fetchDashboard(): Promise<DashboardSummary> {
-  const response = await apiClient.get('/api/admin/proxy/dashboard');
+  const response = await apiClient.get('/api/admin/dashboard');
   if (!response.ok) {
     throw new Error('No se pudo obtener el dashboard');
   }
