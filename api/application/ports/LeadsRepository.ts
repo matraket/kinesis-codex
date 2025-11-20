@@ -30,6 +30,8 @@ export interface LeadsRepository {
   listWithFilters(filters: LeadFilters): Promise<Result<{ leads: Lead[]; total: number }, Error>>;
   
   updateStatus(id: string, input: UpdateLeadStatusInput): Promise<Result<Lead, Error>>;
-  
+
   updateNotes(id: string, notes: string): Promise<Result<Lead, Error>>;
+
+  getStatusCounts(): Promise<Result<{ total: number; open: number; closed: number }, Error>>;
 }

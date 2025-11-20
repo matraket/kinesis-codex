@@ -11,7 +11,8 @@ export default function SettingsPage() {
 
   const grouped = useMemo(() => {
     const groups: Record<string, SettingRow[]> = {};
-    (data ?? []).forEach((item) => {
+    const items = Array.isArray(data) ? data : [];
+    items.forEach((item) => {
       const category = item.category || 'other';
       groups[category] = groups[category] ? [...groups[category], item] : [item];
     });

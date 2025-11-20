@@ -13,5 +13,15 @@ export async function fetchSettings(): Promise<SettingRow[]> {
   if (!response.ok) {
     throw new Error('No se pudieron obtener las configuraciones');
   }
-  return response.json();
+  const payload = await response.json();
+  if (Array.isArray(payload)) {
+    return payload as SettingRow[];
+  }
+  if (Array.isArray(payload?.data)) {
+    return payload.data as SettingRow[];
+  }
+  if (Array.isArray(payload?.items)) {
+    return payload.items as SettingRow[];
+  }
+  return [];
 }

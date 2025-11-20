@@ -3,7 +3,11 @@ const baseHeaders: HeadersInit = {
 };
 
 function buildUrl(path: string) {
-  return path.startsWith('http') ? path : path;
+  if (path.startsWith('http')) return path;
+
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? process.env.API_BASE_URL ?? '';
+  const normalizedBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+  return `${normalizedBase}${path}`;
 }
 
 async function request(path: string, init?: RequestInit) {
