@@ -12,7 +12,8 @@
     "dev": "tsx watch api/main.ts",
     "start": "tsx api/main.ts",
     "build": "echo 'Build placeholder - TypeScript compilation configured for future tasks'",
-    "test": "vitest"
+    "test": "vitest",
+    "test:cms": "pnpm --dir cms test"
   },
   "dependencies": {
     "fastify": "^5.2.1",

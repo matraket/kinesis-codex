@@ -1,0 +1,54 @@
+{
+  "name": "kinesis-cms",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Panel de administración de Kinesis construido con Next.js App Router.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest",
+    "test:watch": "vitest watch",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@headlessui/react": "^2.2.0",
+    "@tanstack/react-query": "^5.61.1",
+    "@tanstack/react-query-devtools": "^5.61.1",
+    "clsx": "^2.1.1",
+    "js-cookie": "^3.0.5",
+    "next": "^14.2.13",
+    "next-themes": "^0.4.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^4.5.5",
+    "@heroicons/react": "^2.2.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/js-cookie": "^3.0.6",
+    "@types/node": "^20.17.11",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/parser": "^8.17.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.0.0",
+    "jsdom": "^26.0.0",
+    "msw": "^2.7.0",
+    "postcss": "^8.4.49",
+    "prettier": "^3.3.3",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4",
+    "@vitejs/plugin-react": "^4.3.3",
+    "husky": "^9.1.7"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  }
+}
