@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 export const SESSION_COOKIE_NAME = 'kinesis_admin_session';
 
 export interface SessionCookieValue {
-  alias: string;
+  alias?: string;
   secret: string;
   createdAt: string;
 }

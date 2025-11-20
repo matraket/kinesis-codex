@@ -43,7 +43,7 @@ export function useLogin() {
   const queryClient = useQueryClient();
 
   const submit = useCallback(
-    async (payload: { alias: string; secret: string }) => {
+    async (payload: { secret: string }) => {
       const session = await loginAdmin(payload);
       await queryClient.invalidateQueries({ queryKey: ['admin-session'] });
       return session;

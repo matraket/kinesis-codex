@@ -1,11 +1,11 @@
 import { apiClient } from '@/lib/api-client';
 
 export interface AdminSession {
-  alias: string;
+  alias?: string;
   createdAt: string;
 }
 
-export async function loginAdmin(payload: { alias: string; secret: string }): Promise<AdminSession> {
+export async function loginAdmin(payload: { secret: string }): Promise<AdminSession> {
   const response = await apiClient.post('/api/admin/login', payload);
   if (!response.ok) {
     throw new Error('Credenciales inválidas o secret incorrecto');

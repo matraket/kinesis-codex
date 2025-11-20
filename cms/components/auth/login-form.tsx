@@ -9,7 +9,6 @@ export function LoginForm() {
   const { submit } = useLogin();
   const router = useRouter();
   const { push } = useToast();
-  const [alias, setAlias] = useState('');
   const [secret, setSecret] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -17,7 +16,7 @@ export function LoginForm() {
     event.preventDefault();
     setLoading(true);
     try {
-      await submit({ alias, secret });
+      await submit({ secret });
       push({ title: 'Sesión iniciada', description: 'Bienvenido de nuevo' });
       router.replace('/');
     } catch (error) {
@@ -30,20 +29,6 @@ export function LoginForm() {
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit} aria-label="Formulario de acceso">
-      <div>
-        <label className="text-sm font-semibold text-slate-700 dark:text-slate-200" htmlFor="alias">
-          Alias o email
-        </label>
-        <input
-          id="alias"
-          name="alias"
-          value={alias}
-          onChange={(e) => setAlias(e.target.value)}
-          className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-primary focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50"
-          placeholder="admin@kinesis.com"
-          required
-        />
-      </div>
       <div>
         <label className="text-sm font-semibold text-slate-700 dark:text-slate-200" htmlFor="secret">
           Admin secret

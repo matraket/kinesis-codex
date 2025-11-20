@@ -11,7 +11,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const { alias, secret } = await request.json();
+  const { secret } = await request.json();
   const health = await serverFetch('/api/admin/health', {
     method: 'GET',
     headers: { 'X-Admin-Secret': secret }
@@ -21,6 +21,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  const alias = 'Administrador';
   const payload = encodeSession({ alias, secret, createdAt: new Date().toISOString() });
   const response = NextResponse.json({ alias, createdAt: new Date().toISOString() });
   response.cookies.set(SESSION_COOKIE_NAME, payload, {

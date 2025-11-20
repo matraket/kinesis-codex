@@ -22,12 +22,11 @@ describe('LoginForm', () => {
   it('envía credenciales y redirige al dashboard', async () => {
     render(<LoginForm />);
 
-    fireEvent.change(screen.getByLabelText(/alias/i), { target: { value: 'admin' } });
     fireEvent.change(screen.getByLabelText(/admin secret/i), { target: { value: 'secret' } });
     fireEvent.click(screen.getByRole('button', { name: /ingresar/i }));
 
     await waitFor(() => {
-      expect(submit).toHaveBeenCalledWith({ alias: 'admin', secret: 'secret' });
+      expect(submit).toHaveBeenCalledWith({ secret: 'secret' });
       expect(replace).toHaveBeenCalledWith('/');
     });
 

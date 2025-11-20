@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 interface Toast {
@@ -19,6 +19,12 @@ const ToastContext = createContext<ToastContextValue | null>(null);
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [container, setContainer] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const target = document.getElementById('toast-root');
+    setContainer(target);
+  }, []);
 
   const push = useCallback((toast: Omit<Toast, 'id'>) => {
     setToasts((current) => [...current, { id: crypto.randomUUID(), ...toast }]);
@@ -33,7 +39,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={value}>
       {children}
-      {typeof document !== 'undefined'
+      {container
         ? createPortal(
             <div className="fixed right-4 top-4 z-50 flex w-full max-w-sm flex-col gap-2">
               {toasts.map((toast) => (
@@ -58,7 +64,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                 </div>
               ))}
             </div>,
-            document.body
+            container
           )
         : null}
     </ToastContext.Provider>
