@@ -557,3 +557,8 @@ All endpoints under `/api/public` prefix:
 ## Notes
 
 This is the initial CHANGELOG for the Kinesis project. Future changes will be documented following this format.
+
+## Unreleased
+
+### Added
+- New admin dashboard summary endpoint (`GET /api/admin/dashboard`) returning lead, page, and settings counts for the CMS dashboard.

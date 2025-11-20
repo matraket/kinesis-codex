@@ -14,6 +14,7 @@ import {
   BusinessModelsController,
   PageContentController,
   FaqsController,
+  DashboardController,
 } from '../controllers/index.js';
 import { LegalPagesController } from '../controllers/LegalPagesController.js';
 import { SettingsController } from '../controllers/SettingsController.js';
@@ -28,6 +29,7 @@ import { registerFaqsRoutes } from './faqsRoutes.js';
 import { registerLegalPagesRoutes } from './legalPagesRoutes.js';
 import { registerSettingsRoutes } from './settingsRoutes.js';
 import { registerLeadsRoutes } from './leadsRoutes.js';
+import { registerDashboardRoutes } from './dashboardRoutes.js';
 
 export async function registerAdminRoutes(fastify: FastifyInstance) {
   const specialtyRepository = new PostgresSpecialtyRepository();
@@ -48,6 +50,7 @@ export async function registerAdminRoutes(fastify: FastifyInstance) {
   const legalPagesController = new LegalPagesController();
   const settingsController = new SettingsController();
   const leadsController = new LeadsController();
+  const dashboardController = new DashboardController();
 
   await registerSpecialtiesRoutes(fastify, specialtiesController);
   await registerInstructorsRoutes(fastify, instructorsController);
@@ -59,4 +62,5 @@ export async function registerAdminRoutes(fastify: FastifyInstance) {
   await registerLegalPagesRoutes(fastify, legalPagesController);
   await registerSettingsRoutes(fastify, settingsController);
   await registerLeadsRoutes(fastify, leadsController);
+  await registerDashboardRoutes(fastify, dashboardController);
 }
