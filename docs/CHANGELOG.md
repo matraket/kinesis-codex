@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Bootstrap CMS Fase 3 con Next.js App Router, Tailwind y React Query en `cms/` (login, dashboard, leads/settings read-only, tema claro/oscuro, toasts, stores Zustand, middleware de sesión `X-Admin-Secret`).
 - Rutas internas `/api/admin/*` que validan sesión y proxifican hacia la API, más base de pruebas con Vitest/Testing Library y documentación en `docs/cms/README.md`.
+- Pasos concisos en español para configurar el login del CMS y acceder al panel (`docs/cms/README.md`, `cms/README.md`).
 
 ### Changed - Tooling alignment with PRDs
 - Migrated package manager configuration to **pnpm** (`.replit` workflow updated, `package-lock.json` removido) y agregado `replit.nix` con pnpm.
