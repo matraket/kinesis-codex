@@ -1,32 +1,53 @@
-const baseHeaders: HeadersInit = {
+import { getStoredSecret } from './auth-storage';
+
+type RequestOptions = RequestInit & {
+  authSecret?: string;
+};
+
+const defaultHeaders: HeadersInit = {
   'Content-Type': 'application/json'
 };
+
+function getBaseUrl() {
+  return (process.env.NEXT_PUBLIC_API_BASE_URL ?? process.env.API_BASE_URL ?? 'http://localhost:5001').replace(
+    /\/$/,
+    '',
+  );
+}
 
 function buildUrl(path: string) {
   if (path.startsWith('http')) return path;
 
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? process.env.API_BASE_URL ?? '';
-  const normalizedBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
-  return `${normalizedBase}${path}`;
+  const baseUrl = getBaseUrl();
+  if (path.startsWith('/')) return `${baseUrl}${path}`;
+
+  return `${baseUrl}/${path}`;
 }
 
-async function request(path: string, init?: RequestInit) {
-  const url = buildUrl(path);
-  return fetch(url, {
-    credentials: 'include',
+function resolveAuthHeaders(secret?: string): HeadersInit {
+  const token = secret ?? getStoredSecret();
+  return token ? { 'X-Admin-Secret': token } : {};
+}
+
+async function request(path: string, init?: RequestOptions) {
+  const { authSecret, ...rest } = init ?? {};
+
+  return fetch(buildUrl(path), {
+    ...rest,
     headers: {
-      ...baseHeaders,
-      ...(init?.headers ?? {})
-    },
-    ...init
+      ...defaultHeaders,
+      ...resolveAuthHeaders(authSecret),
+      ...(rest.headers ?? {})
+    }
   });
 }
 
 export const apiClient = {
-  get: (path: string) => request(path, { method: 'GET' }),
-  post: (path: string, body?: unknown) =>
+  get: (path: string, options?: RequestOptions) => request(path, { method: 'GET', ...options }),
+  post: (path: string, body?: unknown, options?: RequestOptions) =>
     request(path, {
       method: 'POST',
-      body: body ? JSON.stringify(body) : undefined
+      body: body ? JSON.stringify(body) : undefined,
+      ...options
     })
 };

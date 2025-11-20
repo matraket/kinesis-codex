@@ -773,6 +773,22 @@ GET /api/admin/leads?leadType=contact&status=new&page=1&limit=50
 }
 ```
 
+### Lead Status Summary
+```
+GET /api/admin/leads/summary
+```
+
+Returns aggregate counts grouped by workflow status (used by el dashboard del CMS).
+
+**Response**
+```json
+{
+  "total": 150,
+  "open": 120,
+  "closed": 30
+}
+```
+
 ### Get Lead by ID
 ```
 GET /api/admin/leads/:id

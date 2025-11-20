@@ -11,6 +11,11 @@ export async function registerLeadsRoutes(
     handler: controller.list.bind(controller),
   });
 
+  fastify.get('/leads/summary', {
+    preHandler: adminAuthMiddleware,
+    handler: controller.summary.bind(controller),
+  });
+
   fastify.get('/leads/:id', {
     preHandler: adminAuthMiddleware,
     handler: controller.getById.bind(controller),
