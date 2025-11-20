@@ -12,6 +12,7 @@ Base del panel admin de Kinesis (FASE 3). Incluye App Router, Tailwind, React Qu
 
 - Formulario en `/login` pide solo el `X-Admin-Secret`.
 - Valida contra `/api/admin/health` vía ruta interna `app/api/admin/login`.
+- Si defines `ADMIN_SECRET` (o `X_ADMIN_SECRET`) en tu entorno, el login lo usará como fallback local.
 - Cookie `kinesis_admin_session` httpOnly, `SameSite=Strict`, `secure` en prod.
 - Middleware protege todas las rutas salvo `/login` y APIs públicas.
 

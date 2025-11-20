@@ -12,18 +12,35 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const { secret } = await request.json();
-  const health = await serverFetch('/api/admin/health', {
-    method: 'GET',
-    headers: { 'X-Admin-Secret': secret }
-  });
+  const envSecret = process.env.ADMIN_SECRET || process.env.X_ADMIN_SECRET;
+  const now = new Date().toISOString();
 
-  if (!health.ok) {
+  let isValid = false;
+
+  if (envSecret && secret === envSecret) {
+    isValid = true;
+  }
+
+  if (!isValid) {
+    try {
+      const health = await serverFetch('/api/admin/health', {
+        method: 'GET',
+        headers: { 'X-Admin-Secret': secret }
+      });
+      isValid = health.ok;
+    } catch (error) {
+      console.error('Failed to validate admin secret against backend', error);
+      isValid = false;
+    }
+  }
+
+  if (!isValid) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   const alias = 'Administrador';
-  const payload = encodeSession({ alias, secret, createdAt: new Date().toISOString() });
-  const response = NextResponse.json({ alias, createdAt: new Date().toISOString() });
+  const payload = encodeSession({ alias, secret, createdAt: now });
+  const response = NextResponse.json({ alias, createdAt: now });
   response.cookies.set(SESSION_COOKIE_NAME, payload, {
     httpOnly: true,
     sameSite: 'strict',

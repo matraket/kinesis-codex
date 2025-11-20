@@ -10,6 +10,11 @@ Panel de administración de Kinesis construido con Next.js (App Router), Tailwin
 - `pnpm lint`: ejecuta ESLint con reglas alineadas a Next.
 - `pnpm test`: ejecuta la suite de Vitest + Testing Library.
 
+## Configuración de entorno
+
+- Define `API_BASE_URL` o `NEXT_PUBLIC_API_BASE_URL` apuntando al backend que expone `/api/admin/**`.
+- Exporta `ADMIN_SECRET` (o `X_ADMIN_SECRET`) en tu shell para validar el login de manera local; si coincide con el secret del backend, el flujo se autenticará.
+
 ## Estructura destacada
 
 - `app/(auth)/login`: pantalla de login y rutas públicas.

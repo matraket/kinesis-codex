@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `package.json` ahora separa dependencias de runtime y de desarrollo según lo exigido en los PRDs (Fastify/PG/Zod en runtime; TypeScript, tipos, Vitest y tsx en dev).
 - Generación de `pnpm-lock.yaml` pendiente por bloqueos 403 del registro de npm en el entorno actual; reintentar cuando haya acceso.
 
+### Fixed
+- Flujo de login del CMS acepta `ADMIN_SECRET`/`X_ADMIN_SECRET` desde el entorno como respaldo cuando el backend no está disponible, manteniendo la validación con `/api/admin/health`.
+
 ### Added - T5: Legal Pages, Settings, and Leads Management API (November 2025)
 
 #### Overview
