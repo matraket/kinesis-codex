@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-kinesis_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeMeSuperSecret!}
+      POSTGRES_DB: ${POSTGRES_DB:-kinesis_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/sql/01_init_core_schema.sql:/docker-entrypoint-initdb.d/01_init_core_schema.sql:ro
+      - ./scripts/sql/02_public_api_schema.sql:/docker-entrypoint-initdb.d/02_public_api_schema.sql:ro
+      - ./context/data-init/data-init.sql:/docker-entrypoint-initdb.d/10_data_init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      PORT: ${PORT:-3000}
+      DATABASE_URL: "${DATABASE_URL:-postgresql://${DB_USER:-kinesis_app}:${DB_PASSWORD:-changeMeAppPass!}@db:${DB_PORT:-5432}/${DB_NAME:-kinesis_db}}"
+      NODE_ENV: ${NODE_ENV:-production}
+    ports:
+      - "${PORT:-3000}:3000"
+
+volumes:
+  postgres_data:
