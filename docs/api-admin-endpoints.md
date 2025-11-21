@@ -16,6 +16,28 @@ The admin secret is configured via the `ADMIN_SECRET` environment variable (defa
 
 All admin endpoints are mounted under: `/api/admin`
 
+## Dashboard
+
+### Get CMS dashboard summary
+```
+GET /api/admin/dashboard
+```
+
+**Headers**
+- `X-Admin-Secret`: Admin secret value.
+
+**Response**
+```json
+{
+  "leads": { "total": 120, "open": 45, "closed": 75, "trend": "0%" },
+  "pages": { "published": 8, "legal": 3 },
+  "settings": { "active": 12, "outdated": false }
+}
+```
+
+The endpoint aggregates lead counts by status, published content pages, current legal pages, and settings recency to power the CM
+S dashboard widgets.
+
 ## Specialties
 
 ### List All Specialties
@@ -748,6 +770,22 @@ GET /api/admin/leads?leadType=contact&status=new&page=1&limit=50
   "page": 1,
   "limit": 50,
   "pages": 3
+}
+```
+
+### Lead Status Summary
+```
+GET /api/admin/leads/summary
+```
+
+Returns aggregate counts grouped by workflow status (used by el dashboard del CMS).
+
+**Response**
+```json
+{
+  "total": 150,
+  "open": 120,
+  "closed": 30
 }
 ```
 

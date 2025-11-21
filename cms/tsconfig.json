@@ -1,21 +1,61 @@
 {
-  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "jsx": "preserve",
-    "paths": {
-      "@/app/*": ["./app/*"],
-      "@/components/*": ["./components/*"],
-      "@/features/*": ["./features/*"],
-      "@/lib/*": ["./lib/*"],
-      "@/store/*": ["./store/*"],
-      "@/styles/*": ["./styles/*"],
-      "@/tests/*": ["./tests/*"]
-    },
-    "strict": true,
-    "noEmit": true,
+    "target": "ES2022",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
     "moduleResolution": "bundler",
-    "incremental": true
+    "strict": true,
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "types": [
+      "node"
+    ],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./*"
+      ],
+      "@/app/*": [
+        "./app/*"
+      ],
+      "@/components/*": [
+        "./components/*"
+      ],
+      "@/features/*": [
+        "./features/*"
+      ],
+      "@/lib/*": [
+        "./lib/*"
+      ],
+      "@/styles/*": [
+        "./styles/*"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next"
+  ]
 }

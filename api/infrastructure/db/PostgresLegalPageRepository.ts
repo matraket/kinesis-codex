@@ -142,6 +142,16 @@ export class PostgresLegalPageRepository implements ILegalPageRepository {
     }
   }
 
+  async countCurrent(): Promise<Result<number, Error>> {
+    try {
+      const pool = getDbPool();
+      const result = await pool.query('SELECT COUNT(*)::int as count FROM legal_pages WHERE is_current = true');
+      return Ok(result.rows[0]?.count ?? 0);
+    } catch (error) {
+      return Err(error instanceof Error ? error : new Error('Unknown error counting current legal pages'));
+    }
+  }
+
   async findByType(pageType: string): Promise<Result<LegalPage | null, Error>> {
     try {
       const pool = getDbPool();

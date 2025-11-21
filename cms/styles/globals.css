@@ -6,45 +6,10 @@
   color-scheme: light;
 }
 
-:root[data-theme='dark'] {
-  color-scheme: dark;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
 body {
-  @apply bg-slate-50 text-slate-900 antialiased;
-}
-
-.dark body {
-  @apply bg-slate-950 text-slate-100;
+  @apply bg-surface text-white min-h-screen antialiased;
 }
 
 a {
-  @apply text-primary hover:underline;
-}
-
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  @apply outline-none ring-2 ring-primary/70 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-900;
-}
-
-.container-page {
-  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
-}
-
-.card {
-  @apply rounded-2xl bg-white p-6 shadow-card ring-1 ring-slate-100 dark:bg-slate-900 dark:ring-slate-800;
-}
-
-.table-heading {
-  @apply text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400;
-}
-
-.pill {
-  @apply inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold;
+  @apply text-primary;
 }

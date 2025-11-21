@@ -137,4 +137,22 @@ export class PostgresSettingsRepository implements ISettingsRepository {
       return Err(error instanceof Error ? error : new Error('Unknown error updating setting'));
     }
   }
+
+  async getStatus(): Promise<Result<{ active: number; outdated: boolean }, Error>> {
+    try {
+      const pool = getDbPool();
+      const result = await pool.query('SELECT COUNT(*)::int as count, MAX(updated_at) as latest FROM settings');
+
+      const active = result.rows[0]?.count ?? 0;
+      const latestUpdatedAt = result.rows[0]?.latest ? new Date(result.rows[0].latest) : null;
+      const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+
+      return Ok({
+        active,
+        outdated: latestUpdatedAt ? latestUpdatedAt < thirtyDaysAgo : true,
+      });
+    } catch (error) {
+      return Err(error instanceof Error ? error : new Error('Unknown error checking settings status'));
+    }
+  }
 }

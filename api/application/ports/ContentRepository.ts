@@ -7,6 +7,8 @@ export interface ContentRepository {
   getPageByKey(pageKey: string): Promise<Result<PageContent | null, Error>>;
   
   listPublishedPages(): Promise<Result<PageContent[], Error>>;
-  
+
   listMainNavigationItems(): Promise<Result<PageContent[], Error>>;
+
+  countPublishedPages(): Promise<Result<number, Error>>;
 }

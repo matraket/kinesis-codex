@@ -9,8 +9,8 @@
     "test": "tests"
   },
   "scripts": {
-    "dev": "tsx watch api/main.ts",
-    "start": "tsx api/main.ts",
+    "dev": "tsx watch --env-file .env api/main.ts",
+    "start": "tsx --env-file .env api/main.ts",
     "build": "echo 'Build placeholder - TypeScript compilation configured for future tasks'",
     "test": "vitest",
     "test:cms": "pnpm --dir cms test"

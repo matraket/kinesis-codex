@@ -5,3 +5,4 @@ export * from './PricingTiersController.js';
 export * from './BusinessModelsController.js';
 export * from './PageContentController.js';
 export * from './FaqsController.js';
+export * from './DashboardController.js';
