@@ -1,14 +1,22 @@
 ﻿'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/features/auth/auth-context';
 
-const navItems = [{ href: '/admin', label: 'Dashboard' }];
+const navItems = [
+  { href: '/admin', label: 'Dashboard' },
+  { href: '/admin/content', label: 'Contenidos' },
+  { href: '/admin/leads', label: 'Leads' },
+  { href: '/admin/settings', label: 'Ajustes' }
+];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+
+  const activeLabel = navItems.find((item) => pathname.startsWith(item.href))?.label ?? 'Panel';
 
   const handleLogout = () => {
     logout();
@@ -27,7 +35,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Link
               key={item.href}
               href={item.href}
-              className="block rounded-lg px-3 py-2 text-sm font-medium text-white hover:bg-white/10"
+              className={`block rounded-lg px-3 py-2 text-sm font-medium transition ${
+                pathname.startsWith(item.href)
+                  ? 'bg-white/10 text-white'
+                  : 'text-muted hover:bg-white/10 hover:text-white'
+              }`}
             >
               {item.label}
             </Link>
@@ -38,7 +50,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <header className="flex items-center justify-between border-b border-border bg-[#0F172A] px-6 py-4">
           <div>
             <p className="text-xs uppercase tracking-wide text-muted">Panel</p>
-            <h2 className="text-lg font-semibold">Dashboard basico</h2>
+            <h2 className="text-lg font-semibold">{activeLabel}</h2>
           </div>
           <button
             onClick={handleLogout}

@@ -8,6 +8,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-kinesis_app}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeMeSuperSecret!}
       POSTGRES_DB: ${POSTGRES_DB:-kinesis_db}
+    ports:
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./scripts/sql/01_init_core_schema.sql:/docker-entrypoint-initdb.d/01_init_core_schema.sql:ro
@@ -20,21 +22,21 @@ services:
       retries: 5
       start_period: 10s
 
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      db:
-        condition: service_healthy
-    env_file:
-      - .env
-    environment:
-      PORT: ${PORT:-3000}
-      DATABASE_URL: "${DATABASE_URL:-postgresql://${DB_USER:-kinesis_app}:${DB_PASSWORD:-changeMeAppPass!}@db:${DB_PORT:-5432}/${DB_NAME:-kinesis_db}}"
-      NODE_ENV: ${NODE_ENV:-production}
-    ports:
-      - "${PORT:-3000}:3000"
+  # api:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     PORT: ${PORT:-3000}
+  #     DATABASE_URL: "${DATABASE_URL:-postgresql://${DB_USER:-kinesis_app}:${DB_PASSWORD:-changeMeAppPass!}@db:${DB_PORT:-5432}/${DB_NAME:-kinesis_db}}"
+  #     NODE_ENV: ${NODE_ENV:-production}
+  #   ports:
+  #     - "${PORT:-3000}:3000"
 
 volumes:
   postgres_data:

@@ -29,12 +29,24 @@
 2. Abre `http://localhost:3000` en el navegador.
 3. El root te redirigirá solo al login (`/admin/login`) cuando no haya sesión.
 
-## 5. PROBAR LOGIN BÁSICO
-1. Backend encendido (`PORT=5001`) y CMS en `pnpm dev` como se explicó arriba.
-2. Abre `http://localhost:3000` (te llevará al login si no tienes sesión, y al dashboard si ya la tienes guardada en el navegador).
-3. Aparece un único campo llamado “Contraseña de admin”. Escribe exactamente el secreto del backend (`ADMIN_SECRET`). Con la plantilla actual es `Kinesis2025*#`.
-4. Pulsa “Entrar”.
-   - **Si la contraseña es correcta:** la API responde 200, la sesión se guarda en `localStorage` y se muestra el dashboard mínimo con el botón “Salir”.
-   - **Si la contraseña es incorrecta (401/403):** el formulario muestra `Contrasena incorrecta` y sigues en la pantalla de login.
-   - **Si la API está caída o no responde:** verás `No se puede conectar con la API. Asegurate de que el backend este corriendo.` y el login no avanzará hasta que levantes el backend.
-5. Desde el dashboard pulsa “Salir” para borrar la sesión y volver automáticamente al login.
+## Cómo probar el login de administrador
+1. Variables necesarias:
+   - En el backend `.env`: `ADMIN_SECRET=Kinesis2025*#` (o el valor que quieras usar).
+   - En el CMS `cms/.env.local`: `NEXT_PUBLIC_API_BASE_URL=http://localhost:5001` y, si quieres precargar el secreto en el cliente HTTP, `NEXT_PUBLIC_ADMIN_SECRET=Kinesis2025*#` (o el mismo valor que `ADMIN_SECRET`).
+2. Arranca la API (puerto 5001) con las variables anteriores y deja que imprima `Server listening on 0.0.0.0:5001`.
+3. Arranca el CMS: `cd cms && pnpm dev`. Abre `http://localhost:3000`.
+4. Flujo esperado:
+   - Si no tienes sesión → el root te lleva a `/admin/login`. Verás un único campo de contraseña y el botón “Entrar”.
+   - Escribe exactamente la contraseña configurada en `ADMIN_SECRET` (por ejemplo `Kinesis2025*#`) y pulsa “Entrar”.
+   - **Contraseña correcta:** entrarás al dashboard y se guardará la sesión en `localStorage`.
+   - **Contraseña incorrecta (401/403):** verás “Contrasena incorrecta” y seguirás en el login.
+   - **API apagada o inalcanzable:** verás “No se puede conectar con la API. Asegurate de que el backend este corriendo.” y no pasarás del login.
+5. Si ya estás logueado y visitas `/admin/login` o `/`, la app te redirige automáticamente al dashboard. Usa “Salir” en el dashboard para limpiar la sesión y regresar al login.
+6. Navegación del CMS (una vez logueado):
+   - Sidebar con enlaces: Dashboard (`/admin`), Contenidos (`/admin/content`), Leads (`/admin/leads`) y Ajustes (`/admin/settings`).
+   - Contenidos (`/admin/content`) trabaja contra `/api/admin/programs`:
+     - Listado con filtros (buscar por nombre/código, estado, visibilidad), tabla con Nombre, Código, Activo, Visible web y acciones Editar/Borrar.
+     - Botón “Añadir programa” abre `/admin/content/new` con formulario dedicado.
+     - Acción Editar abre `/admin/content/{id}/edit`; en ambas pantallas puedes guardar o cancelar (vuelve al listado).
+     - Borrar pide confirmación y elimina vía API.
+     - Estados: “Cargando programas...” mientras trae datos; mensaje de error si falla; “No hay programas disponibles” si la API responde vacío.

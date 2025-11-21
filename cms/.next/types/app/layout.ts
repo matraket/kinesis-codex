@@ -1,4 +1,4 @@
-// File: C:\xampp\htdocs\git-projects\Hackathon-ViveCoding\Codex\cms\app\layout.tsx
+// File: /Applications/XAMPP/xamppfiles/htdocs/git-projects/Kinesis/kinesis-codex/cms/app/layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

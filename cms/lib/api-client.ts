@@ -4,9 +4,8 @@ type RequestOptions = RequestInit & {
   authSecret?: string;
 };
 
-const defaultHeaders: HeadersInit = {
-  'Content-Type': 'application/json'
-};
+const envAdminSecret =
+  process.env.NEXT_PUBLIC_ADMIN_SECRET?.trim() || process.env.ADMIN_SECRET?.trim() || '';
 
 function getBaseUrl() {
   const rawBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? process.env.API_BASE_URL ?? '';
@@ -29,20 +28,24 @@ function buildUrl(path: string) {
 }
 
 function resolveAuthHeaders(secret?: string): HeadersInit {
-  const token = secret ?? getStoredSecret();
+  const token = secret ?? getStoredSecret() ?? envAdminSecret;
   return token ? { 'X-Admin-Secret': token } : {};
 }
 
 async function request(path: string, init?: RequestOptions) {
   const { authSecret, ...rest } = init ?? {};
+  const headers: HeadersInit = {
+    ...resolveAuthHeaders(authSecret),
+    ...(rest.headers ?? {})
+  };
+
+  if (rest.body && !('Content-Type' in headers)) {
+    headers['Content-Type'] = 'application/json';
+  }
 
   return fetch(buildUrl(path), {
     ...rest,
-    headers: {
-      ...defaultHeaders,
-      ...resolveAuthHeaders(authSecret),
-      ...(rest.headers ?? {})
-    }
+    headers
   });
 }
 
@@ -52,6 +55,11 @@ export const apiClient = {
     request(path, {
       method: 'POST',
       body: body ? JSON.stringify(body) : undefined,
+      ...options
+    }),
+  del: (path: string, options?: RequestOptions) =>
+    request(path, {
+      method: 'DELETE',
       ...options
     })
 };

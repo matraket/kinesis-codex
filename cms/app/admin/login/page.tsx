@@ -33,9 +33,6 @@ export default function AdminLoginPage() {
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6">
       <div className="rounded-2xl border border-border bg-white/5 p-8 shadow-lg">
         <h1 className="text-2xl font-bold text-white">Acceso administrador</h1>
-        <p className="mt-2 text-sm text-muted">
-          Ingresa la contrasena de administrador configurada en la API (ADMIN_SECRET).
-        </p>
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div className="space-y-2">
             <label className="text-sm font-semibold text-white" htmlFor="password">
