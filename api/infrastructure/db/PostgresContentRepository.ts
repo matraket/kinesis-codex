@@ -616,4 +616,14 @@ export class PostgresContentRepository implements ContentRepository, IPageConten
       return Err(error instanceof Error ? error : new Error('Unknown error deleting page'));
     }
   }
+
+  async countPublishedPages(): Promise<Result<number, Error>> {
+    try {
+      const pool = getDbPool();
+      const result = await pool.query("SELECT COUNT(*)::int as count FROM page_content WHERE status = 'published'");
+      return Ok(result.rows[0]?.count ?? 0);
+    } catch (error) {
+      return Err(error instanceof Error ? error : new Error('Unknown error counting published pages'));
+    }
+  }
 }

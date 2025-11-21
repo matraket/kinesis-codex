@@ -11,6 +11,21 @@ import {
 export class LeadsController {
   private repository = new PostgresLeadsRepository();
 
+  async summary(_request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const result = await this.repository.getStatusCounts();
+      if (result.isErr()) {
+        return reply.status(500).send({ error: result.error.message });
+      }
+      return reply.status(200).send(result.value);
+    } catch (error) {
+      if (error instanceof Error) {
+        return reply.status(400).send({ error: error.message });
+      }
+      return reply.status(500).send({ error: 'Unknown error' });
+    }
+  }
+
   async list(request: FastifyRequest, reply: FastifyReply) {
     try {
       const filters = listLeadsQuerySchema.parse(request.query);

@@ -365,4 +365,27 @@ export class PostgresLeadsRepository implements LeadsRepository {
       return Err(error instanceof Error ? error : new Error('Unknown error updating lead notes'));
     }
   }
+
+  async getStatusCounts(): Promise<Result<{ total: number; open: number; closed: number }, Error>> {
+    try {
+      const pool = getDbPool();
+
+      const openStatuses = ['new', 'contacted', 'qualified'];
+      const closedStatuses = ['converted', 'lost'];
+
+      const [totalResult, openResult, closedResult] = await Promise.all([
+        pool.query('SELECT COUNT(*)::int as count FROM leads'),
+        pool.query('SELECT COUNT(*)::int as count FROM leads WHERE lead_status = ANY($1)', [openStatuses]),
+        pool.query('SELECT COUNT(*)::int as count FROM leads WHERE lead_status = ANY($1)', [closedStatuses]),
+      ]);
+
+      return Ok({
+        total: totalResult.rows[0]?.count ?? 0,
+        open: openResult.rows[0]?.count ?? 0,
+        closed: closedResult.rows[0]?.count ?? 0,
+      });
+    } catch (error) {
+      return Err(error instanceof Error ? error : new Error('Unknown error getting lead status counts'));
+    }
+  }
 }

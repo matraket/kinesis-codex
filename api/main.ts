@@ -3,7 +3,7 @@ import { checkDbConnection } from './infrastructure/db/client.js';
 import { publicRoutes } from './interfaces/http/public/routes/index.js';
 import { registerAdminRoutes } from './interfaces/http/admin/routes/index.js';
 
-const PORT = process.env.PORT || '5000';
+const PORT = process.env.PORT || '5001';
 
 if (!PORT) {
   console.error('ERROR: process.env.PORT is not defined. Cannot start server.');
@@ -14,6 +14,27 @@ console.log(`Starting server on port ${PORT}...`);
 
 const server = Fastify({
   logger: true
+});
+
+const allowedOrigins = process.env.ADMIN_CORS_ORIGIN
+  ? process.env.ADMIN_CORS_ORIGIN.split(',').map((o) => o.trim())
+  : ['http://localhost:3000'];
+
+server.addHook('onRequest', (request, reply, done) => {
+  const origin = request.headers.origin;
+  const allowOrigin = origin && allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
+
+  reply.header('Access-Control-Allow-Origin', allowOrigin);
+  reply.header('Vary', 'Origin');
+  reply.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+  reply.header('Access-Control-Allow-Headers', 'Content-Type, X-Admin-Secret');
+
+  if (request.method === 'OPTIONS') {
+    reply.status(204).send();
+    return;
+  }
+
+  done();
 });
 
 server.get('/', async (_request: FastifyRequest, _reply: FastifyReply) => {

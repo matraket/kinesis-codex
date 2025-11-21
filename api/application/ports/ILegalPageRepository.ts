@@ -7,9 +7,11 @@ export interface ILegalPageRepository {
   list(pageType?: string): Promise<Result<LegalPage[], Error>>;
   
   findBySlug(slug: string): Promise<Result<LegalPage | null, Error>>;
-  
+
   findById(id: string): Promise<Result<LegalPage | null, Error>>;
-  
+
+  countCurrent(): Promise<Result<number, Error>>;
+
   findByType(pageType: string): Promise<Result<LegalPage | null, Error>>;
   
   create(input: CreateLegalPageInput): Promise<Result<LegalPage, Error>>;

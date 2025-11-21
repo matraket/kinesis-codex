@@ -6,6 +6,9 @@ import { PostgresPricingTierRepository } from '../../../../infrastructure/db/Pos
 import { PostgresBusinessModelRepository } from '../../../../infrastructure/db/PostgresBusinessModelRepository.js';
 import { PostgresContentRepository } from '../../../../infrastructure/db/PostgresContentRepository.js';
 import { PostgresFAQRepository } from '../../../../infrastructure/db/PostgresFAQRepository.js';
+import { PostgresLegalPageRepository } from '../../../../infrastructure/db/PostgresLegalPageRepository.js';
+import { PostgresSettingsRepository } from '../../../../infrastructure/db/PostgresSettingsRepository.js';
+import { PostgresLeadsRepository } from '../../../../infrastructure/db/PostgresLeadsRepository.js';
 import {
   SpecialtiesController,
   InstructorsController,
@@ -14,6 +17,7 @@ import {
   BusinessModelsController,
   PageContentController,
   FaqsController,
+  DashboardController,
 } from '../controllers/index.js';
 import { LegalPagesController } from '../controllers/LegalPagesController.js';
 import { SettingsController } from '../controllers/SettingsController.js';
@@ -28,6 +32,8 @@ import { registerFaqsRoutes } from './faqsRoutes.js';
 import { registerLegalPagesRoutes } from './legalPagesRoutes.js';
 import { registerSettingsRoutes } from './settingsRoutes.js';
 import { registerLeadsRoutes } from './leadsRoutes.js';
+import { registerDashboardRoutes } from './dashboardRoutes.js';
+import { GetDashboardSummaryUseCase } from '../../../../application/use-cases/admin/getDashboardSummary.js';
 
 export async function registerAdminRoutes(fastify: FastifyInstance) {
   const specialtyRepository = new PostgresSpecialtyRepository();
@@ -37,6 +43,9 @@ export async function registerAdminRoutes(fastify: FastifyInstance) {
   const businessModelRepository = new PostgresBusinessModelRepository();
   const pageContentRepository = new PostgresContentRepository();
   const faqRepository = new PostgresFAQRepository();
+  const legalPageRepository = new PostgresLegalPageRepository();
+  const settingsRepository = new PostgresSettingsRepository();
+  const leadsRepository = new PostgresLeadsRepository();
 
   const specialtiesController = new SpecialtiesController(specialtyRepository);
   const instructorsController = new InstructorsController(instructorRepository);
@@ -48,6 +57,13 @@ export async function registerAdminRoutes(fastify: FastifyInstance) {
   const legalPagesController = new LegalPagesController();
   const settingsController = new SettingsController();
   const leadsController = new LeadsController();
+  const getDashboardSummary = new GetDashboardSummaryUseCase(
+    leadsRepository,
+    pageContentRepository,
+    legalPageRepository,
+    settingsRepository,
+  );
+  const dashboardController = new DashboardController(getDashboardSummary);
 
   await registerSpecialtiesRoutes(fastify, specialtiesController);
   await registerInstructorsRoutes(fastify, instructorsController);
@@ -59,4 +75,5 @@ export async function registerAdminRoutes(fastify: FastifyInstance) {
   await registerLegalPagesRoutes(fastify, legalPagesController);
   await registerSettingsRoutes(fastify, settingsController);
   await registerLeadsRoutes(fastify, leadsController);
+  await registerDashboardRoutes(fastify, dashboardController);
 }

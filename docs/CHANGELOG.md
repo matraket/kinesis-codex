@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Bootstrap CMS Fase 3 con Next.js App Router, Tailwind y React Query en `cms/` (login, dashboard, leads/settings read-only, tema claro/oscuro, toasts, stores Zustand, middleware de sesión `X-Admin-Secret`).
+- Rutas internas `/api/admin/*` que validan sesión y proxifican hacia la API, más base de pruebas con Vitest/Testing Library y documentación en `docs/cms/README.md`.
+- Pasos concisos en español para configurar el login del CMS y acceder al panel (`docs/cms/README.md`, `cms/README.md`).
+- Endpoint `GET /api/admin/dashboard` con agregados de leads, contenido publicado, páginas legales vigentes y estado de settings para alimentar el dashboard del CMS.
+- Endpoint `GET /api/admin/leads/summary` que devuelve totales abiertos/cerrados del pipeline para las vistas de dashboard y leads del CMS (documentado en `docs/api-admin-endpoints.md`).
+- Puerto por defecto del backend en desarrollo cambia a `5001` para evitar conflicto con macOS Control Center (`commplex-main` en el puerto 5000). `PORT` sigue siendo configurable vía entorno para Docker/producción.
+
+### Changed - Tooling alignment with PRDs
+- Migrated package manager configuration to **pnpm** (`.replit` workflow updated, `package-lock.json` removido) y agregado `replit.nix` con pnpm.
+- `package.json` ahora separa dependencias de runtime y de desarrollo según lo exigido en los PRDs (Fastify/PG/Zod en runtime; TypeScript, tipos, Vitest y tsx en dev).
+- Generación de `pnpm-lock.yaml` pendiente por bloqueos 403 del registro de npm en el entorno actual; reintentar cuando haya acceso.
+
+### Fixed
+- Flujo de login del CMS acepta `ADMIN_SECRET`/`X_ADMIN_SECRET` desde el entorno como respaldo cuando el backend no está disponible, manteniendo la validación con `/api/admin/health`.
+- El CMS ahora consume `/api/admin/*` directamente y el middleware reescribe internamente hacia `/api/admin/proxy/*`, evitando 404 y manteniendo los enums reales (`leadType`, `status`, `from`, `to`).
+- Vista de settings más robusta: serializa valores JSON a texto, agrupa únicamente si recibe arrays válidos y evita errores `forEach is not a function`.
+- Los filtros/estadísticas de Leads se alinean con la API (`leadStatus`, `leadType`) y muestran los totales devueltos por `GET /api/admin/leads/summary`.
+- Las llamadas del CMS se fuerzan a usar rutas relativas (`/api/admin/**`), evitando errores CORS aunque se definan `NEXT_PUBLIC_API_BASE_URL`/`API_BASE_URL`; el middleware se encarga de proxificar y adjuntar `X-Admin-Secret`.
+
 ### Added - T5: Legal Pages, Settings, and Leads Management API (November 2025)
 
 #### Overview
@@ -544,3 +564,8 @@ All endpoints under `/api/public` prefix:
 ## Notes
 
 This is the initial CHANGELOG for the Kinesis project. Future changes will be documented following this format.
+
+## Unreleased
+
+### Added
+- New admin dashboard summary endpoint (`GET /api/admin/dashboard`) returning lead, page, and settings counts for the CMS dashboard.
