@@ -7,6 +7,14 @@ import { useAuth } from '@/features/auth/auth-context';
 const navItems = [
   { href: '/admin', label: 'Dashboard' },
   { href: '/admin/content', label: 'Contenidos' },
+  { href: '/admin/courses', label: 'Cursos' },
+  { href: '/admin/specialties', label: 'Especialidades' },
+  { href: '/admin/levels', label: 'Niveles' },
+  { href: '/admin/instructors', label: 'Instructores' },
+  { href: '/admin/rooms', label: 'Salas' },
+  { href: '/admin/business-models', label: 'Modelos de negocio' },
+  { href: '/admin/bonuses', label: 'Bonos' },
+  { href: '/admin/students', label: 'Estudiantes' },
   { href: '/admin/leads', label: 'Leads' },
   { href: '/admin/settings', label: 'Ajustes' }
 ];

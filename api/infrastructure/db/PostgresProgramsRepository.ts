@@ -12,6 +12,15 @@ import { getDbPool } from './client.js';
 import { randomUUID } from 'crypto';
 
 export class PostgresProgramsRepository implements ProgramsRepository {
+  async countAll(): Promise<Result<number, Error>> {
+    try {
+      const pool = getDbPool();
+      const result = await pool.query('SELECT COUNT(*)::int as count FROM programs');
+      return Ok(result.rows[0]?.count ?? 0);
+    } catch (error) {
+      return Err(error instanceof Error ? error : new Error('Unknown error counting programs'));
+    }
+  }
   async listPublicPrograms(): Promise<Result<Program[], Error>> {
     try {
       const pool = getDbPool();

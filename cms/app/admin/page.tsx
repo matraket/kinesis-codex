@@ -7,6 +7,9 @@ type DashboardSummary = {
   leads: { total: number; open: number; closed: number; trend?: string };
   pages: { published: number; legal: number };
   settings: { active: number; outdated: boolean };
+  courses?: { total: number };
+  students?: { total: number };
+  bonuses?: { total: number };
 };
 
 async function fetchDashboard(): Promise<DashboardSummary> {
@@ -65,9 +68,9 @@ export default function AdminDashboardPage() {
           </div>
 
           <div className="rounded-xl border border-border bg-white/5 p-4">
-            <p className="text-xs uppercase tracking-wide text-muted">Contenidos publicados</p>
-            <h4 className="mt-1 text-3xl font-semibold text-white">{data.pages.published}</h4>
-            <p className="mt-1 text-sm text-muted">Páginas legales: {data.pages.legal}</p>
+            <p className="text-xs uppercase tracking-wide text-muted">Programas</p>
+            <h4 className="mt-1 text-3xl font-semibold text-white">{data.programs?.total ?? 0}</h4>
+            <p className="mt-1 text-sm text-muted">Total de programas en el CMS</p>
           </div>
 
           <div className="rounded-xl border border-border bg-white/5 p-4">
@@ -76,6 +79,24 @@ export default function AdminDashboardPage() {
             <p className="mt-1 text-sm text-muted">
               Estado: {data.settings.outdated ? 'Desactualizados' : 'Actualizados'}
             </p>
+          </div>
+
+          <div className="rounded-xl border border-border bg-white/5 p-4">
+            <p className="text-xs uppercase tracking-wide text-muted">Cursos</p>
+            <h4 className="mt-1 text-3xl font-semibold text-white">{data.courses?.total ?? 0}</h4>
+            <p className="mt-1 text-sm text-muted">Total cursos/actividades</p>
+          </div>
+
+          <div className="rounded-xl border border-border bg-white/5 p-4">
+            <p className="text-xs uppercase tracking-wide text-muted">Estudiantes</p>
+            <h4 className="mt-1 text-3xl font-semibold text-white">{data.students?.total ?? 0}</h4>
+            <p className="mt-1 text-sm text-muted">Fichas de alumnos en el sistema</p>
+          </div>
+
+          <div className="rounded-xl border border-border bg-white/5 p-4">
+            <p className="text-xs uppercase tracking-wide text-muted">Bonos</p>
+            <h4 className="mt-1 text-3xl font-semibold text-white">{data.bonuses?.total ?? 0}</h4>
+            <p className="mt-1 text-sm text-muted">Packs de clases creados</p>
           </div>
         </div>
       )}

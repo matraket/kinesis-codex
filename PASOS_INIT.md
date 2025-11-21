@@ -50,3 +50,11 @@
      - Acción Editar abre `/admin/content/{id}/edit`; en ambas pantallas puedes guardar o cancelar (vuelve al listado).
      - Borrar pide confirmación y elimina vía API.
      - Estados: “Cargando programas...” mientras trae datos; mensaje de error si falla; “No hay programas disponibles” si la API responde vacío.
+   - Especialidades (`/admin/specialties`) CRUD completo contra `/api/admin/specialties`: filtros, creación/edición con código/nombre/categoría/descripcion/activa/orden, y borrar con confirmación.
+   - Modelos de negocio (`/admin/business-models`) CRUD completo contra `/api/admin/business-models`: listado con búsqueda, acciones Editar/Borrar, alta en `/admin/business-models/new` y edición en `/admin/business-models/{id}/edit`.
+   - Instructores (`/admin/instructors`) CRUD completo contra `/api/admin/instructors`: listado con búsqueda, alta en `/admin/instructors/new`, edición en `/admin/instructors/{id}/edit` y borrar con confirmación.
+   - Niveles (`/admin/levels`) CRUD completo contra `/api/admin/levels`: listado con búsqueda, alta en `/admin/levels/new`, edición en `/admin/levels/{id}/edit` y borrar con confirmación.
+   - Salas (`/admin/rooms`) CRUD completo contra `/api/admin/rooms`: listado con búsqueda, alta en `/admin/rooms/new`, edición en `/admin/rooms/{id}/edit` y borrar con confirmación.
+   - Cursos (`/admin/courses`) CRUD completo contra `/api/admin/courses`: listado con búsqueda/estado, acciones Editar/Borrar, alta en `/admin/courses/new`, edición en `/admin/courses/{id}/edit`; selects de programa, especialidad, nivel, sala, instructor y modelo de negocio.
+   - Bonos (`/admin/bonuses`) CRUD completo contra `/api/admin/bonuses`: listado con búsqueda/activo, acciones Editar/Borrar, alta en `/admin/bonuses/new`, edición en `/admin/bonuses/{id}/edit`.
+   - Estudiantes (`/admin/students`) CRUD completo contra `/api/admin/students`: listado con búsqueda/estado, alta en `/admin/students/new`, edición en `/admin/students/{id}/edit` y borrar con confirmación.

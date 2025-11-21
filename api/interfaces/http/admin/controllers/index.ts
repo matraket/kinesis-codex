@@ -6,3 +6,8 @@ export * from './BusinessModelsController.js';
 export * from './PageContentController.js';
 export * from './FaqsController.js';
 export * from './DashboardController.js';
+export * from './LevelsController.js';
+export * from './RoomsController.js';
+export * from './CoursesController.js';
+export * from './BonusesController.js';
+export * from './StudentsController.js';
