@@ -9,16 +9,20 @@ const defaultHeaders: HeadersInit = {
 };
 
 function getBaseUrl() {
-  return (process.env.NEXT_PUBLIC_API_BASE_URL ?? process.env.API_BASE_URL ?? 'http://localhost:5001').replace(
-    /\/$/,
-    '',
-  );
+  const rawBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? process.env.API_BASE_URL ?? '';
+  if (!rawBaseUrl) return '';
+  return rawBaseUrl.replace(/\/$/, '');
 }
 
 function buildUrl(path: string) {
   if (path.startsWith('http')) return path;
 
   const baseUrl = getBaseUrl();
+  if (!baseUrl) {
+    if (path.startsWith('/')) return path;
+    return `/${path}`;
+  }
+
   if (path.startsWith('/')) return `${baseUrl}${path}`;
 
   return `${baseUrl}/${path}`;

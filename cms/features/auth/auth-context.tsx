@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -7,40 +7,50 @@ import { clearStoredSession, persistSession, readStoredSession, type StoredSessi
 import { login as loginRequest, logout as logoutRequest, validateSession } from '@/lib/api/auth';
 
 type AuthContextValue = {
+  isAuthenticated: boolean;
   session: StoredSession | null;
   isLoading: boolean;
   error?: string;
-  login: (email: string, secret: string) => Promise<void>;
+  login: (secret: string) => Promise<void>;
   logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [storedSession, setStoredSession] = useState<StoredSession | null>(() => readStoredSession());
+  const [storedSession, setStoredSession] = useState<StoredSession | null>(null);
+  const [hasHydrated, setHasHydrated] = useState(false);
   const queryClient = useQueryClient();
 
-  const sessionQuery = useQuery({
-    queryKey: ['auth', 'session', storedSession?.email],
+  useEffect(() => {
+    setStoredSession(readStoredSession());
+    setHasHydrated(true);
+  }, []);
+
+  const sessionQuery = useQuery<StoredSession, Error>({
+    queryKey: ['auth', 'session', storedSession?.secret ?? null],
     queryFn: async () => {
-      if (!storedSession) throw new Error('No hay sesión');
+      if (!storedSession) throw new Error('No hay sesion');
       return validateSession(storedSession);
     },
-    enabled: Boolean(storedSession?.secret),
+    enabled: Boolean(hasHydrated && storedSession?.secret),
     staleTime: 5 * 60 * 1000,
-    retry: false,
-    onError: () => {
+    retry: false
+  });
+
+  useEffect(() => {
+    if (sessionQuery.isError) {
       clearStoredSession();
       setStoredSession(null);
     }
-  });
+  }, [sessionQuery.isError]);
 
-  const loginMutation = useMutation({
-    mutationFn: (payload: { email: string; secret: string }) => loginRequest(payload),
+  const loginMutation = useMutation<StoredSession, Error, string>({
+    mutationFn: (secret: string) => loginRequest({ secret }),
     onSuccess: (session) => {
       persistSession(session);
       setStoredSession(session);
-      queryClient.setQueryData(['auth', 'session', session.email], session);
+      queryClient.setQueryData(['auth', 'session', session.secret], session);
     },
     onError: () => {
       clearStoredSession();
@@ -55,21 +65,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     void logoutRequest();
   };
 
-  const session = sessionQuery.isError ? null : sessionQuery.data ?? storedSession ?? null;
-  const isLoading = sessionQuery.isFetching || loginMutation.isPending;
-  const error = (loginMutation.error as Error | null)?.message ?? (sessionQuery.error as Error | null)?.message;
+  const session = sessionQuery.data ?? storedSession ?? null;
+  const isAuthenticated = Boolean(session?.secret);
+  const isLoading = !hasHydrated || sessionQuery.isFetching || loginMutation.isPending;
+  const error = loginMutation.error?.message ?? sessionQuery.error?.message;
 
   const value = useMemo<AuthContextValue>(
     () => ({
+      isAuthenticated,
       session,
       isLoading,
       error,
-      login: async (email: string, secret: string) => {
-        await loginMutation.mutateAsync({ email, secret });
+      login: async (secret: string) => {
+        await loginMutation.mutateAsync(secret);
       },
       logout
     }),
-    [error, isLoading, session, loginMutation, logout]
+    [error, isAuthenticated, isLoading, loginMutation, logout, session]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -82,17 +94,17 @@ export function useAuth() {
 }
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { session, isLoading } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoading && !session) {
+    if (!isLoading && !isAuthenticated) {
       router.replace('/admin/login');
     }
-  }, [isLoading, session, router]);
+  }, [isAuthenticated, isLoading, router]);
 
-  if (!session) {
-    return isLoading ? <div className="p-6 text-sm text-muted">Comprobando sesión...</div> : null;
+  if (!isAuthenticated) {
+    return isLoading ? <div className="p-6 text-sm text-muted">Comprobando acceso...</div> : null;
   }
 
   return <>{children}</>;

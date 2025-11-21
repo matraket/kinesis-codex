@@ -1,18 +1,13 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/features/auth/auth-context';
 
-const navItems = [
-  { href: '/admin', label: 'Dashboard' },
-  { href: '/admin/content', label: 'Contenidos' },
-  { href: '/admin/leads', label: 'Leads' },
-  { href: '/admin/settings', label: 'Ajustes' }
-];
+const navItems = [{ href: '/admin', label: 'Dashboard' }];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const { session, logout } = useAuth();
+  const { logout } = useAuth();
   const router = useRouter();
 
   const handleLogout = () => {
@@ -43,19 +38,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <header className="flex items-center justify-between border-b border-border bg-[#0F172A] px-6 py-4">
           <div>
             <p className="text-xs uppercase tracking-wide text-muted">Panel</p>
-            <h2 className="text-lg font-semibold">Kinesis Admin</h2>
+            <h2 className="text-lg font-semibold">Dashboard basico</h2>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="rounded-full bg-white/10 px-4 py-2 text-sm text-white">
-              {session?.email ?? 'Invitado'}
-            </div>
-            <button
-              onClick={handleLogout}
-              className="rounded-lg border border-border px-3 py-2 text-sm font-semibold text-white hover:bg-white/10"
-            >
-              Cerrar sesión
-            </button>
-          </div>
+          <button
+            onClick={handleLogout}
+            className="rounded-lg border border-border px-3 py-2 text-sm font-semibold text-white hover:bg-white/10"
+          >
+            Salir
+          </button>
         </header>
         <main className="px-8 py-6">{children}</main>
       </div>

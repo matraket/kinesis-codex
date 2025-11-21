@@ -1,8 +1,8 @@
 const STORAGE_KEY = 'kinesis_admin_session';
 
 export type StoredSession = {
-  email: string;
   secret: string;
+  createdAt: number;
 };
 
 export function readStoredSession(): StoredSession | null {
@@ -12,7 +12,12 @@ export function readStoredSession(): StoredSession | null {
   if (!raw) return null;
 
   try {
-    return JSON.parse(raw) as StoredSession;
+    const data = JSON.parse(raw) as Partial<StoredSession>;
+    if (!data?.secret) return null;
+    return {
+      secret: data.secret,
+      createdAt: typeof data.createdAt === 'number' ? data.createdAt : Date.now()
+    };
   } catch {
     return null;
   }
