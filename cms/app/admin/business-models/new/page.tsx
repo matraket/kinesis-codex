@@ -4,6 +4,8 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { apiClient } from '@/lib/api-client';
+import { TabSwitcher } from '@/components/ui/Tabs';
+import { WebContentEditor } from '@/components/ui/WebContentEditor';
 
 type BusinessModelPayload = {
   internalCode: string;
@@ -31,6 +33,7 @@ async function createBusinessModel(payload: BusinessModelPayload) {
 
 export default function NewBusinessModelPage() {
   const router = useRouter();
+  const [activeTab, setActiveTab] = useState<'data' | 'web'>('data');
   const [formState, setFormState] = useState<BusinessModelPayload>({
     internalCode: '',
     name: '',
@@ -77,102 +80,120 @@ export default function NewBusinessModelPage() {
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6 rounded-xl border border-border bg-white/5 p-6 text-sm text-muted">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div className="space-y-1">
-            <label className="text-xs text-muted">Código interno</label>
-            <input
-              className="w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-sm text-white focus:border-primary focus:outline-none"
-              value={formState.internalCode}
-              onChange={(e) => setFormState((s) => ({ ...s, internalCode: e.target.value }))}
-              required
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="text-xs text-muted">Nombre</label>
-            <input
-              className="w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-sm text-white focus:border-primary focus:outline-none"
-              value={formState.name}
-              onChange={(e) => setFormState((s) => ({ ...s, name: e.target.value }))}
-              required
-            />
-          </div>
-        </div>
+      <div className="space-y-3">
+        <TabSwitcher
+          tabs={[
+            { id: 'data', label: 'Datos' },
+            { id: 'web', label: 'Vista web', description: 'Ficha pública' }
+          ]}
+          activeTab={activeTab}
+          onChange={setActiveTab}
+        />
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div className="space-y-1">
-            <label className="text-xs text-muted">Subtítulo</label>
-            <input
-              className="w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-sm text-white focus:border-primary focus:outline-none"
-              value={formState.subtitle}
-              onChange={(e) => setFormState((s) => ({ ...s, subtitle: e.target.value }))}
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="text-xs text-muted">Formato</label>
-            <input
-              className="w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-sm text-white focus:border-primary focus:outline-none"
-              value={formState.format}
-              onChange={(e) => setFormState((s) => ({ ...s, format: e.target.value }))}
-            />
-          </div>
-        </div>
+        {activeTab === 'data' && (
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-6 rounded-xl border border-border bg-white/5 p-6 text-sm text-muted"
+          >
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="space-y-1">
+                <label className="text-xs text-muted">Código interno</label>
+                <input
+                  className="w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-sm text-white focus:border-primary focus:outline-none"
+                  value={formState.internalCode}
+                  onChange={(e) => setFormState((s) => ({ ...s, internalCode: e.target.value }))}
+                  required
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs text-muted">Nombre</label>
+                <input
+                  className="w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-sm text-white focus:border-primary focus:outline-none"
+                  value={formState.name}
+                  onChange={(e) => setFormState((s) => ({ ...s, name: e.target.value }))}
+                  required
+                />
+              </div>
+            </div>
 
-        <div className="space-y-1">
-          <label className="text-xs text-muted">Descripción</label>
-          <textarea
-            className="w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-sm text-white focus:border-primary focus:outline-none"
-            rows={4}
-            value={formState.description}
-            onChange={(e) => setFormState((s) => ({ ...s, description: e.target.value }))}
-            required
-          />
-        </div>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="space-y-1">
+                <label className="text-xs text-muted">Subtítulo</label>
+                <input
+                  className="w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-sm text-white focus:border-primary focus:outline-none"
+                  value={formState.subtitle}
+                  onChange={(e) => setFormState((s) => ({ ...s, subtitle: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs text-muted">Formato</label>
+                <input
+                  className="w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-sm text-white focus:border-primary focus:outline-none"
+                  value={formState.format}
+                  onChange={(e) => setFormState((s) => ({ ...s, format: e.target.value }))}
+                />
+              </div>
+            </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div className="space-y-1">
-            <label className="text-xs text-muted">Slug</label>
-            <input
-              className="w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-sm text-white focus:border-primary focus:outline-none"
-              value={formState.slug}
-              onChange={(e) => setFormState((s) => ({ ...s, slug: e.target.value }))}
-              required
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="text-xs text-muted">Orden</label>
-            <input
-              type="number"
-              className="w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-sm text-white focus:border-primary focus:outline-none"
-              value={formState.displayOrder ?? 0}
-              onChange={(e) => setFormState((s) => ({ ...s, displayOrder: Number(e.target.value) }))}
-            />
-          </div>
-        </div>
+            <div className="space-y-1">
+              <label className="text-xs text-muted">Descripción</label>
+              <textarea
+                className="w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-sm text-white focus:border-primary focus:outline-none"
+                rows={4}
+                value={formState.description}
+                onChange={(e) => setFormState((s) => ({ ...s, description: e.target.value }))}
+                required
+              />
+            </div>
 
-        {mutation.isError && (
-          <p className="text-red-400 text-sm">
-            {mutation.error instanceof Error ? mutation.error.message : 'No se pudo crear el modelo'}
-          </p>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="space-y-1">
+                <label className="text-xs text-muted">Slug</label>
+                <input
+                  className="w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-sm text-white focus:border-primary focus:outline-none"
+                  value={formState.slug}
+                  onChange={(e) => setFormState((s) => ({ ...s, slug: e.target.value }))}
+                  required
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs text-muted">Orden</label>
+                <input
+                  type="number"
+                  className="w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-sm text-white focus:border-primary focus:outline-none"
+                  value={formState.displayOrder ?? 0}
+                  onChange={(e) => setFormState((s) => ({ ...s, displayOrder: Number(e.target.value) }))}
+                />
+              </div>
+            </div>
+
+            {mutation.isError && (
+              <p className="text-red-400 text-sm">
+                {mutation.error instanceof Error ? mutation.error.message : 'No se pudo crear el modelo'}
+              </p>
+            )}
+
+            <div className="flex gap-3">
+              <button
+                type="submit"
+                disabled={mutation.isPending}
+                className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 disabled:opacity-70"
+              >
+                {mutation.isPending ? 'Guardando...' : 'Crear modelo'}
+              </button>
+              <button
+                type="button"
+                onClick={() => router.push('/admin/business-models')}
+                className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
         )}
 
-        <div className="flex gap-3">
-          <button
-            type="submit"
-            disabled={mutation.isPending}
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 disabled:opacity-70"
-          >
-            {mutation.isPending ? 'Guardando...' : 'Crear modelo'}
-          </button>
-          <button
-            type="button"
-            onClick={() => router.push('/admin/business-models')}
-            className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
-          >
-            Cancelar
-          </button>
-        </div>
-      </form>
+        {activeTab === 'web' && <WebContentEditor entityLabel="modelo de negocio" />}
+      </div>
     </section>
   );
 }

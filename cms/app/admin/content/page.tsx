@@ -138,7 +138,7 @@ export default function AdminContentPage() {
 
   return (
     <section className="space-y-4">
-      <h3 className="text-2xl font-semibold text-white">Contenidos</h3>
+      <h3 className="text-2xl font-semibold text-white">Programas</h3>
       <p className="text-sm text-muted">Programas (lectura con acciones de alta/edición/borrado).</p>
 
       <div className="flex flex-col gap-3 rounded-xl border border-border bg-white/5 p-4 text-sm text-muted">

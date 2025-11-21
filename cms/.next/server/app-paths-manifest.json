@@ -1,9 +1,10 @@
 {
+  "/api/web-content/route": "app/api/web-content/route.js",
+  "/admin/page": "app/admin/page.js",
+  "/web/instructores/page": "app/web/instructores/page.js",
+  "/web/page": "app/web/page.js",
   "/admin/instructors/page": "app/admin/instructors/page.js",
-  "/admin/courses/page": "app/admin/courses/page.js",
   "/admin/instructors/[id]/edit/page": "app/admin/instructors/[id]/edit/page.js",
-  "/admin/content/[id]/edit/page": "app/admin/content/[id]/edit/page.js",
-  "/admin/business-models/page": "app/admin/business-models/page.js",
-  "/admin/content/page": "app/admin/content/page.js",
-  "/admin/courses/[id]/edit/page": "app/admin/courses/[id]/edit/page.js"
+  "/web/programas/page": "app/web/programas/page.js",
+  "/web/instructores/[id]/page": "app/web/instructores/[id]/page.js"
 }

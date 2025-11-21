@@ -6,7 +6,7 @@ import { useAuth } from '@/features/auth/auth-context';
 
 const navItems = [
   { href: '/admin', label: 'Dashboard' },
-  { href: '/admin/content', label: 'Contenidos' },
+  { href: '/admin/content', label: 'Programas' },
   { href: '/admin/courses', label: 'Cursos' },
   { href: '/admin/specialties', label: 'Especialidades' },
   { href: '/admin/levels', label: 'Niveles' },
